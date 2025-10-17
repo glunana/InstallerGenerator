@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Projects</title></head>
+<body>
+<h1>Projects</h1>
+
+<div th:if="${message}" style="color:green" th:text="${message}"></div>
+
+<p><a th:href="@{/createProject}">+ Create new project</a></p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Version</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${projects}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.projectName}"></td>
+        <td th:text="${p.version}"></td>
+        <td>
+            <a th:href="@{|/projects/${p.id}|}">Details</a>
+            <form th:action="@{|/projects/${p.id}/delete|}" method="post" style="display:inline">
+                <button type="submit" onclick="return confirm('Delete this project?')">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

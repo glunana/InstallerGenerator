@@ -10,13 +10,13 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
     @Column(nullable = false)
-    private String projectName; // назва проєкту
+    private String projectName;
 
     @Column(nullable = false)
-    private String version; // версія
+    private String version;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<File> files = new ArrayList<>();
@@ -84,8 +84,16 @@ public class Project {
 
     // Метод для встановлення налаштувань інсталяції
     public void setInstallerSettings(String installPath, boolean createDesktopShortcut, String language) {
+        if (this.installerSettings == null) {
+            this.installerSettings = new InstallerSettings();
+        }
         this.installerSettings.setInstallPath(installPath);
         this.installerSettings.setCreateDesktopShortcut(createDesktopShortcut);
         this.installerSettings.setLanguage(language);
+
+        // Встановлюємо проект для installerSettings
+        this.installerSettings.setProject(this);
     }
+
+
 }

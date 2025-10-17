@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Project</title>
+</head>
+<body>
+<h1>Create a New Project</h1>
+
+<div th:if="${message}" style="color: green;">
+    <p th:text="${message}"></p>
+</div>
+
+<form th:action="@{/createProject}" method="POST">
+    <div>
+        <label for="projectName">Project Name:</label>
+        <input type="text" id="projectName" name="projectName" placeholder="Enter Project Name" required />
+    </div>
+    <div>
+        <label for="version">Version:</label>
+        <input type="text" id="version" name="version" placeholder="Enter Version (e.g., 1.0.0)" required />
+    </div>
+    <button type="submit">Create Project</button>
+    <p><a th:href="@{/projects}">View projects list</a></p>
+</form>
+</body>
+</html>
