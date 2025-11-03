@@ -76,13 +76,11 @@ public class Project {
         this.installerSettings = installerSettings;
     }
 
-    // Метод для додавання файлів до проекту
     public void addFile(File file) {
         this.files.add(file);
         file.setProject(this);
     }
 
-    // Метод для встановлення налаштувань інсталяції
     public void setInstallerSettings(String installPath, boolean createDesktopShortcut, String language) {
         if (this.installerSettings == null) {
             this.installerSettings = new InstallerSettings();
@@ -91,7 +89,6 @@ public class Project {
         this.installerSettings.setCreateDesktopShortcut(createDesktopShortcut);
         this.installerSettings.setLanguage(language);
 
-        // Встановлюємо проект для installerSettings
         this.installerSettings.setProject(this);
     }
 

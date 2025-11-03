@@ -1,29 +1,34 @@
 package com.example.installer.controller;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.util.Set;
-import java.nio.file.StandardCopyOption;
-import java.io.IOException;
 import com.example.installer.Project;
 import com.example.installer.File;
 import com.example.installer.InstallerSettings;
-import org.springframework.web.multipart.MultipartFile;
 import com.example.installer.repository.ProjectRepository;
+import com.example.installer.service.installer.InstallerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class ProjectController {
 
+    private final ProjectRepository projectRepository;
+    private final InstallerBuilder installerBuilder;
+
     @Autowired
-    private ProjectRepository projectRepository;
+    public ProjectController(ProjectRepository projectRepository,
+                             InstallerBuilder installerBuilder) {
+        this.projectRepository = projectRepository;
+        this.installerBuilder = installerBuilder;
+    }
 
     @GetMapping("/createProject")
     public String showCreateProjectForm() {
@@ -101,10 +106,6 @@ public class ProjectController {
     }
 
 
-
-
-
-
     @PostMapping("/projects/{id}/addFiles")
     public String addFilesToProject(@PathVariable Long id, @RequestParam("files") MultipartFile[] files,
                                     RedirectAttributes redirectAttributes) {
@@ -147,5 +148,24 @@ public class ProjectController {
         redirectAttributes.addFlashAttribute("message", "Files added successfully to project " + project.getProjectName());
         return "redirect:/projects/" + id;
     }
+
+    @PostMapping("/projects/{id}/generateInstaller")
+    public String generateInstaller(@PathVariable Long id,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            String exePath = installerBuilder.buildInstallerForProject(id);
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "Installer generated successfully: " + exePath
+            );
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "Failed to generate installer: " + e.getMessage()
+            );
+        }
+        return "redirect:/projects/" + id;
+    }
+
 
 }

@@ -8,21 +8,21 @@ public class Shortcut {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
     @Column(nullable = false)
-    private boolean createShortcut; // Чи створювати ярлик
+    private boolean createShortcut;
 
     @Column(nullable = false)
-    private String shortcutPath;    // Шлях до ярлика
+    private String shortcutPath;
 
     @ManyToOne
     @JoinColumn(name = "icon_id", nullable = false)
-    private Icon icon; // Іконка для ярлика
+    private Icon icon;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
-    private Project project; // Проект, до якого належить ярлик
+    private Project project;
 
     public Shortcut() {
 
@@ -75,7 +75,6 @@ public class Shortcut {
         this.project = project;
     }
 
-    // Метод для отримання детальної інформації про ярлик
     public String getShortcutDetails() {
         return "Create Shortcut: " + createShortcut + ", Path: " + shortcutPath + ", Icon: " + icon.getIconDetails();
     }

@@ -8,11 +8,11 @@ public class InstallerSettings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
-    private String installPath; // Шлях для інсталяції
-    private boolean createDesktopShortcut; // Чи створювати ярлик на робочому столі
-    private String language; // Мова інсталяції
+    private String installPath;
+    private boolean createDesktopShortcut;
+    private String language;
 
     @OneToOne
     @JoinColumn(name = "project_id")

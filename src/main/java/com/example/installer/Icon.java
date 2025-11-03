@@ -8,13 +8,13 @@ public class Icon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
     @Column(nullable = false)
-    private String iconName; // Назва іконки
+    private String iconName;
 
     @Column(nullable = false)
-    private String iconPath; // Шлях до іконки на диску
+    private String iconPath;
 
     public Icon() {
 
@@ -49,7 +49,6 @@ public class Icon {
         this.iconPath = iconPath;
     }
 
-    // Метод для отримання детальної інформації про іконку
     public String getIconDetails() {
         return "Icon Name: " + iconName + ", Path: " + iconPath;
     }

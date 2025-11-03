@@ -8,14 +8,14 @@ public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
     @Column(nullable = false)
     private String fileName;
     @Column(nullable = false)
-    private String fileType;  // Тип файлу
+    private String fileType;
     @Column(nullable = false)
-    private String path;      // Шлях до файлу на локальному диску
+    private String path;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
@@ -72,7 +72,6 @@ public class File {
         this.project = project;
     }
 
-    // Метод для отримання інформації про файл
     public String getFileDetails() {
         return "File Name: " + fileName + ", Type: " + fileType + ", Path: " + path;
     }

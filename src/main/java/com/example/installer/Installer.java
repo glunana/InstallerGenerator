@@ -3,20 +3,18 @@ package com.example.installer;
 import java.io.IOException;
 
 public class Installer {
-    private ExeFile exeFile;  // Посилання на файл .exe
-    private String installPath;  // Шлях для інсталяції
+    private ExeFile exeFile;
+    private String installPath;
 
     public Installer(ExeFile exeFile, String installPath) {
         this.exeFile = exeFile;
         this.installPath = installPath;
     }
 
-    // Метод для перевірки, чи інсталяційний файл готовий до запуску
     public boolean isReadyToInstall() {
         return exeFile.isCreated() && exeFile.validateExe();
     }
 
-    // Метод для запуску інсталяції
     public void startInstallation() {
         if (isReadyToInstall()) {
             System.out.println("Starting installation...");

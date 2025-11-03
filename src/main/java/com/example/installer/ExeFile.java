@@ -9,10 +9,10 @@ public class ExeFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // первинний ключ
+    private Long id;
 
-    private String exeFileName; // Ім'я .exe файлу
-    private boolean isCreated;  // Статус того, чи був файл створений
+    private String exeFileName;
+    private boolean isCreated;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
@@ -61,19 +61,16 @@ public class ExeFile {
         this.project = project;
     }
 
-    // Генерація .exe файлу
     public void generateExe() {
         System.out.println("Generating .exe file: " + exeFileName);
         this.isCreated = true;
     }
 
-    // Перевірка валідності .exe файлу
     public boolean validateExe() {
         File file = new File(exeFileName);
         return file.exists() && file.isFile();
     }
 
-    // Отримання детальної інформації про .exe файл
     public String getExeFileDetails() {
         return "ExeFile: " + exeFileName + ", Created: " + isCreated;
     }

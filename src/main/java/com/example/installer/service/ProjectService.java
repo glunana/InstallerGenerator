@@ -11,7 +11,6 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    // Логіка для створення нового проекту
     public Project createNewProject(String projectName, String version) {
         Project project = new Project();
         project.setProjectName(projectName);
