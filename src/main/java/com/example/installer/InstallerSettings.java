@@ -13,6 +13,7 @@ public class InstallerSettings {
     private String installPath;
     private boolean createDesktopShortcut;
     private String language;
+    private String mainClass;
 
     @OneToOne
     @JoinColumn(name = "project_id")
@@ -65,5 +66,13 @@ public class InstallerSettings {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public String getMainClass() {
+        return mainClass;
+    }
+
+    public void setMainClass(String mainClass) {
+        this.mainClass = mainClass;
     }
 }
