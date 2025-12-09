@@ -1,5 +1,7 @@
 package com.example.installer.service.installer;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Launch4jConfigBuilder {
 
     private String jarPath;
@@ -8,6 +10,8 @@ public class Launch4jConfigBuilder {
     private String minJreVersion;
     private String iconPath;
     private boolean createDesktopShortcut;
+
+    private String headerType = "gui";
 
     public Launch4jConfigBuilder setJarPath(String jarPath) {
         this.jarPath = jarPath;
@@ -39,14 +43,20 @@ public class Launch4jConfigBuilder {
         return this;
     }
 
+    public Launch4jConfigBuilder setHeaderType(String headerType) {
+        this.headerType = headerType;
+        return this;
+    }
+
     public String build() {
         StringBuilder xml = new StringBuilder();
 
         xml.append("""
                 <launch4jConfig>
                     <dontWrapJar>false</dontWrapJar>
-                    <headerType>console</headerType>
                 """);
+
+        xml.append("    <headerType>").append(headerType).append("</headerType>\n");
 
         xml.append("    <jar>").append(jarPath).append("</jar>\n");
         xml.append("    <outfile>").append(exePath).append("</outfile>\n");

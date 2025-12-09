@@ -83,7 +83,7 @@ public class ProjectController {
                                        @RequestParam String installPath,
                                        @RequestParam(required = false, defaultValue = "false") boolean createDesktopShortcut,
                                        @RequestParam String language,
-                                       @RequestParam String mainClass,  // New parameter
+                                       @RequestParam String mainClass, // Додаємо параметр mainClass
                                        RedirectAttributes redirectAttributes) {
         Optional<Project> projectOpt = projectRepository.findById(id);
         if (projectOpt.isEmpty()) {
@@ -95,12 +95,12 @@ public class ProjectController {
 
         if (project.getInstallerSettings() == null) {
             InstallerSettings newInstallerSettings = new InstallerSettings(installPath, createDesktopShortcut, language);
-            newInstallerSettings.setMainClass(mainClass);  // Set mainClass
+            newInstallerSettings.setMainClass(mainClass);  // Зберігаємо введений mainClass
             newInstallerSettings.setProject(project);
             project.setInstallerSettings(newInstallerSettings);
         } else {
             project.setInstallerSettings(installPath, createDesktopShortcut, language);
-            project.getInstallerSettings().setMainClass(mainClass);  // Set mainClass
+            project.getInstallerSettings().setMainClass(mainClass); // Оновлюємо mainClass
         }
 
         projectRepository.save(project);

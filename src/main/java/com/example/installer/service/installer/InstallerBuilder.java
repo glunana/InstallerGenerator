@@ -6,24 +6,27 @@ import com.example.installer.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InstallerBuilder {
 
     private final JarValidator jarValidator;
-    private final ExeGenerator exeGenerator;
     private final ProjectRepository projectRepository;
 
+    private final Map<InstallerType, InstallerFactory> factories;
+
     public InstallerBuilder(JarValidator jarValidator,
-                            ExeGenerator exeGenerator,
-                            ProjectRepository projectRepository) {
+                            ProjectRepository projectRepository,
+                            List<InstallerFactory> factoryList) {
         this.jarValidator = jarValidator;
-        this.exeGenerator = exeGenerator;
         this.projectRepository = projectRepository;
+
+        this.factories = factoryList.stream()
+                .collect(Collectors.toMap(InstallerFactory::supportsType, f -> f));
     }
 
     @Transactional
@@ -48,17 +51,14 @@ public class InstallerBuilder {
 
         File jarFile = jars.get(0);
 
-        String installDir = project.getInstallerSettings().getInstallPath();
-        Path exePath = Paths.get(installDir, jarFile.getFileName().replace(".jar", ".exe"));
+        InstallerType targetType = InstallerType.EXE;
 
-        String xml = new Launch4jConfigBuilder()
-                .setJarPath(jarFile.getPath())
-                .setExePath(exePath.toString())
-                .setMainClass("com.example.testjarproject.HelloApplication")
-                .setMinJreVersion("16")
-                .setCreateDesktopShortcut(project.getInstallerSettings().isCreateDesktopShortcut())
-                .build();
+        InstallerFactory factory = factories.get(targetType);
 
-        return exeGenerator.generate(xml, exePath.toString());
+        if (factory == null) {
+            throw new UnsupportedOperationException("Type not supported: " + targetType);
+        }
+
+        return factory.generateInstaller(jarFile, project);
     }
 }
