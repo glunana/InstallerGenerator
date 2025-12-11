@@ -12,15 +12,18 @@
 </ul>
 
 <h3>Installer settings</h3>
+
 <div th:if="${project.installerSettings == null}">
   <i>Not set yet</i>
   <form th:action="@{|/projects/${project.id}/setInstallerSettings|}" method="post">
     <label for="installPath">Install Path:</label>
     <input type="text" id="installPath" name="installPath" placeholder="Enter Install Path" required />
     <br />
+
     <label for="createDesktopShortcut">Create Desktop Shortcut:</label>
     <input type="checkbox" id="createDesktopShortcut" name="createDesktopShortcut" />
     <br />
+
     <label for="language">Language:</label>
     <select id="language" name="language">
       <option value="English">English</option>
@@ -28,9 +31,15 @@
       <option value="French">French</option>
     </select>
     <br />
+
     <label for="mainClass">Main Class:</label>
     <input type="text" id="mainClass" name="mainClass" placeholder="Enter Main Class" required />
     <br />
+
+    <label for="requirements">System Requirements:</label>
+    <input type="text" id="requirements" name="requirements" placeholder="e.g., os windows AND java 17" />
+    <br />
+
     <button type="submit">Save Settings</button>
   </form>
 </div>
@@ -40,7 +49,40 @@
     <li th:text="'Path: ' + ${project.installerSettings.installPath}"></li>
     <li th:text="'Desktop shortcut: ' + ${project.installerSettings.createDesktopShortcut}"></li>
     <li th:text="'Language: ' + ${project.installerSettings.language}"></li>
+    <li th:text="'Main Class: ' + ${project.installerSettings.mainClass}"></li>
+    <li th:text="'Requirements: ' + (${project.installerSettings.requirements} ?: 'None')"></li>
   </ul>
+
+  <details>
+    <summary style="cursor: pointer; color: blue;">Edit Settings</summary>
+    <form th:action="@{|/projects/${project.id}/setInstallerSettings|}" method="post" style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;">
+      <label for="installPathEdit">Install Path:</label>
+      <input type="text" id="installPathEdit" name="installPath" th:value="${project.installerSettings.installPath}" required />
+      <br />
+
+      <label for="createDesktopShortcutEdit">Create Desktop Shortcut:</label>
+      <input type="checkbox" id="createDesktopShortcutEdit" name="createDesktopShortcut" th:checked="${project.installerSettings.createDesktopShortcut}" />
+      <br />
+
+      <label for="languageEdit">Language:</label>
+      <select id="languageEdit" name="language">
+        <option value="English" th:selected="${project.installerSettings.language == 'English'}">English</option>
+        <option value="Spanish" th:selected="${project.installerSettings.language == 'Spanish'}">Spanish</option>
+        <option value="French" th:selected="${project.installerSettings.language == 'French'}">French</option>
+      </select>
+      <br />
+
+      <label for="mainClassEdit">Main Class:</label>
+      <input type="text" id="mainClassEdit" name="mainClass" th:value="${project.installerSettings.mainClass}" required />
+      <br />
+
+      <label for="requirementsEdit">System Requirements:</label>
+      <input type="text" id="requirementsEdit" name="requirements" th:value="${project.installerSettings.requirements}" placeholder="os windows AND java 17" />
+      <br />
+
+      <button type="submit">Update Settings</button>
+    </form>
+  </details>
 </div>
 
 <h3>Files</h3>
@@ -70,4 +112,3 @@
 
 </body>
 </html>
-

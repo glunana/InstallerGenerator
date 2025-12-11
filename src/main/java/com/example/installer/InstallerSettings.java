@@ -28,6 +28,16 @@ public class InstallerSettings {
         this.language = language;
     }
 
+    private String requirements;
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
     public Long getId() {
         return id;
     }

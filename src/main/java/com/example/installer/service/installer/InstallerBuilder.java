@@ -5,6 +5,9 @@ import com.example.installer.Project;
 import com.example.installer.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.installer.service.interpreter.Context;
+import com.example.installer.service.interpreter.Expression;
+import com.example.installer.service.interpreter.RequirementsParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,24 @@ public class InstallerBuilder {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
+        String reqs = project.getInstallerSettings().getRequirements();
+
+        if (reqs != null && !reqs.trim().isEmpty()) {
+            System.out.println("Interpreter: Checking system requirements -> " + reqs);
+
+            Expression expressionTree = RequirementsParser.parse(reqs);
+
+            Context systemContext = Context.getSystemContext();
+
+            boolean isCompatible = expressionTree.interpret(systemContext);
+
+            if (!isCompatible) {
+                throw new RuntimeException("System requirements check failed! " +
+                        "Required: [" + reqs + "], but system is incompatible.");
+            }
+            System.out.println("Interpreter: System check passed.");
+        }
+
         ProjectFileIterator it = new ProjectFileIterator(project.getFiles());
         List<File> jars = new ArrayList<>();
 
@@ -62,3 +83,4 @@ public class InstallerBuilder {
         return factory.generateInstaller(jarFile, project);
     }
 }
+
